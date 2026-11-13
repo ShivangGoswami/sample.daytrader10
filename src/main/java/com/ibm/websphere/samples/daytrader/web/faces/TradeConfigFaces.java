@@ -179,6 +179,8 @@ public class TradeConfigFaces {
           ddlFile = "/dbscripts/derby/Table.ddl";
         } else if (dbProductName.startsWith("Oracle")) { // if the Db is Oracle
           ddlFile = "/dbscripts/oracle/Table.ddl";
+        } else if (dbProductName.startsWith("PostgreSQL")) { // if the Db is PostgreSQL
+          ddlFile = "/dbscripts/postgresql/Table.ddl";
         } else { // Unsupported "Other" Database
           ddlFile = "/dbscripts/other/Table.ddl";
           result = result + "TradeBuildDB: **** This Database is unsupported/untested use at your own risk ****<br/>";

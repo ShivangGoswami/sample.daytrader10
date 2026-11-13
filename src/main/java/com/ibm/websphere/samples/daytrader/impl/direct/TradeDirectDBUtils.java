@@ -79,6 +79,14 @@ public class TradeDirectDBUtils implements TradeDB {
   }
 
 
+  // PostgreSQL rejects commit() while autoCommit is enabled, so disable it there only.
+  private void disableAutoCommitForPostgreSQL(Connection conn) throws SQLException {
+    String product = conn.getMetaData().getDatabaseProductName();
+    if (product != null && product.toLowerCase().contains("postgresql")) {
+      conn.setAutoCommit(false);
+    }
+  }
+
   /**
    * Re-create the DayTrader db tables and populate them OR just populate a DayTrader DB, logging to the provided output stream
    */
@@ -215,6 +223,7 @@ public class TradeDirectDBUtils implements TradeDB {
     boolean success = false;
     try {
       conn = datasource.getConnection();
+      disableAutoCommitForPostgreSQL(conn);
       Statement stmt = conn.createStatement();
       int bufferLength = sqlBuffer.length;
       for (int i = 0; i < bufferLength; i++) {
@@ -251,6 +260,7 @@ public class TradeDirectDBUtils implements TradeDB {
     try {
 
       conn = datasource.getConnection();
+      disableAutoCommitForPostgreSQL(conn);
       PreparedStatement stmt = null;
       ResultSet rs = null;
 
